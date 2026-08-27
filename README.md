@@ -13,6 +13,9 @@ Tablero:
 - - Cuando se revela una posicion, se marca como revelada, se utilizaría la función de arriba (si es necesario/no hay minas todavía), y se sigue con el resto
 - Funcion que dice si hay una mina en una posicion
 - Si una posicion fue revelada o si tiene una bandera (El estado de la celda)
+
+Partida:
+
 - Cuente las minas alrededor de una posicion
 - Cambiar el estado de una Celda a otro estado, y que devuelva si el juego sigue, o tocaste una mina
 - - Si una celda estaba "desconocida", se puede cambiar a "marcada" o "revelada"
