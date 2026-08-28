@@ -56,7 +56,7 @@ class Board:
         empty_spaces = 0
         for row in self.__cell_rows:
             for column in row:
-                if column == CellState.UNREVEALED:
+                if column != CellState.REVEALED:
                     empty_spaces += 1
                 if empty_spaces >= self.__mines_to_add:
                     break
@@ -69,7 +69,7 @@ class Board:
             x = random.randint(0, self.width() - 1)
             y = random.randint(0, self.height() - 1)
 
-            not_revealed = self.get_cell_state(x, y) == CellState.UNREVEALED
+            not_revealed = self.get_cell_state(x, y) != CellState.REVEALED
             already_a_mine = self.is_mine(x, y)
 
             if not_revealed and not already_a_mine:
@@ -146,7 +146,7 @@ class Board:
         unrevealed_cells = 0
         for row in self.__cell_rows:
             for cell_state in row:
-                if cell_state == CellState.UNREVEALED:
+                if cell_state != CellState.REVEALED:
                     unrevealed_cells += 1
 
         return unrevealed_cells == len(self.__mines)
