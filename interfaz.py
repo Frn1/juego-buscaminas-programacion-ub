@@ -72,9 +72,14 @@ def reveal_cell(board: Board) -> bool:
     x = request_coordinate(board.width(), f"Columna a escanear [1 - {board.width()}]: ")
     y = request_coordinate(board.height(), f"Fila a escanear [1 - {board.height()}]: ")
 
-    if board.get_cell_state(x, y) == CellState.REVEALED:
-        print("Esa celda ya estaba revelada, elegí otra.")
-        return False
+    match board.get_cell_state(x, y):
+        case CellState.FLAG:
+            print("Esa celda tiene una bandera. Debes sacar esa bandera para revelarla.")
+            return False
+        case CellState.REVEALED:
+            print("Esa celda ya fue revelada.")
+            return False
+        case CellState.UNREVEALED: pass
 
     revealed_a_mine = board.change_cell_state(x, y, CellState.REVEALED)
 
