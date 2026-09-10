@@ -9,6 +9,14 @@ class CellState(Enum):
     FLAG = 1
     REVEALED = 2
 
+class AlreadyRevealedError(Exception):
+    ...
+
+class CannotRevealError(Exception):
+    ...
+
+class AlreadyFlaggedError(Exception):
+    ...
 
 class Board:
     __width: int
@@ -116,7 +124,7 @@ class Board:
 
         # Una celda revelada no se puede volver a cambiar
         if current_state == CellState.REVEALED:
-            return False
+            raise AlreadyRevealedError
 
         # DESCONOCIDA solo puede pasar a BANDERA o a REVELADA
         if (
@@ -124,11 +132,11 @@ class Board:
             and new_state != CellState.FLAG
             and new_state != CellState.REVEALED
         ):
-            return False
+            raise CannotRevealError
 
         # BANDERA solo puede volver a DESCONOCIDA
         if current_state == CellState.FLAG and new_state != CellState.UNREVEALED:
-            return False
+            raise AlreadyFlaggedError
 
         # Primero marcamos la nueva posicion..
         self.__set_cell_state(x, y, new_state)
