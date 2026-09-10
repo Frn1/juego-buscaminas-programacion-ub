@@ -1,6 +1,9 @@
 # pyright: strict, reportImplicitRelativeImport=false
 
+import time
+
 import interfaz
+from score import Score
 from tablero import Board
 
 
@@ -44,11 +47,15 @@ def main():
             )
             board = Board(size, size, number_mines)
             print(f"¡Campo con {number_mines} explosivos!")
-            play(board)
+            score = play(board)
+            print(f"Tu puntaje es {score.calculate_score()}")
             board = None
 
 
-def play(board: Board):
+def play(board: Board) -> Score:
+    start_time: int = time.monotonic_ns()
+    lost: bool = False
+    surrendered: bool = False
     while True:
         interfaz.show_board(board)
 
@@ -66,19 +73,23 @@ def play(board: Board):
 
         if opcion == 0:
             print("Partida abandonada.")
-            return
+            surrendered = True
+            break
         elif opcion == 1:
             revealed_mine = interfaz.reveal_cell(board)
             if revealed_mine:
                 interfaz.show_board(board)
-                return
+                lost = True
+                break
             if board.won():
                 interfaz.show_board(board)
                 print("¡Campo desminado con éxito! ¡GANASTE!")
-                return
+                break
         elif opcion == 2:
             interfaz.flag_cell(board)
-
+    end_time = time.monotonic_ns()
+    time_passed = (end_time - start_time) / 1e+9
+    return Score(time=time_passed, lost_game=lost, surrendered=surrendered)
 
 if __name__ == "__main__":
     main()
